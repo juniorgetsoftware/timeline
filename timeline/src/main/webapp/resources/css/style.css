@@ -1,0 +1,45 @@
+@CHARSET "UTF-8";
+
+body {
+	height: 100%;
+	min-height: 100%;
+	background: #f5f5f5;
+	font-family: Roboto;
+}
+
+.btn-green {
+	background: #4caf50 !important;
+	border: 1px solid #4caf50 !important;
+}
+
+.btn-red {
+	background: #ff3526 !important;
+	border: 1px solid #ff3526 !important;
+}
+
+.card {
+	background: white;
+	border-radius: 10px;
+	box-shadow: 1px 2px 2px #d9d9d9;
+}
+
+.title {
+	font-size: 1.5em;
+	color: #127cb6;
+	font-family: Roboto;
+}
+
+.desc {
+	font-weight: 300;
+	padding: 0 30px;
+	color: #888a85;
+}
+
+.right {
+	text-align: right;
+	color: #555;
+}
+
+.ident {
+	padding: 20px;
+}

@@ -1,0 +1,129 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<f:facet name="first">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</f:facet>
+
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{facesContext.externalContext.requestContextPath}/resources/img/logo.ico" />
+
+	<title>Timeline</title>
+	<h:outputStylesheet library="css" name="style.css" />
+
+	<h:outputScript target="body" library="js" name="locale.js" />
+
+</h:head>
+
+
+<h:body>
+
+	<p:growl id="item-msg" />
+
+	<h:form>
+		<div class="ident">
+			<p:commandButton value="Adicionar item" icon="fa fa-save"
+				action="#{itemController.clear()}" update=":itemForm"
+				title="Clique para cadastrar um novo item"
+				oncomplete="PF('itemDialog').show()" resetValues="true" />
+		</div>
+	</h:form>
+
+	<h:panelGroup id="itemTable">
+		<p:repeat var="item" value="#{itemController.itens}">
+
+			<p:panelGrid columns="1" layout="grid" columnClasses="ui-grid-col-12"
+				styleClass="ui-panelgrid-blank">
+
+				<div class="card">
+					<div class="ident">
+						<div class="title">#{item.titulo}</div>
+					</div>
+
+					<div class="desc">#{item.descricao}</div>
+
+					<div class="ident">
+						<div class="right">
+							<h:form style="margin-bottom: 0px;" styleClass="right">
+
+								<h:outputLabel value="#{item.data}">
+									<f:convertDateTime pattern="dd/MM/yy HH:mm" />
+								</h:outputLabel>
+
+								<p:spacer width="5" height="0" />
+
+								<p:commandButton icon="fa fa-edit" styleClass="btn-green"
+									title="Clique para editar os dados"
+									action="#{itemController.setItem(item)}" update=":itemForm"
+									resetValues="true" oncomplete="PF('itemDialog').show()" />
+
+								<p:commandButton icon="fa fa-remove" styleClass="btn-red"
+									title="Clique para remover o registro"
+									action="#{itemController.remove(item)}"
+									update=":itemTable, :item-msg">
+									<p:confirm header="Atenção"
+										message="Deseja exluir permanentemente o registro?"
+										icon="ui-icon-alert" />
+								</p:commandButton>
+							</h:form>
+
+						</div>
+
+					</div>
+				</div>
+
+			</p:panelGrid>
+
+			<p:spacer height="10" width="0" />
+
+		</p:repeat>
+	</h:panelGroup>
+
+
+	<p:dialog widgetVar="itemDialog" closeOnEscape="true" modal="true"
+		header="Manter item" closable="true">
+		<h:form id="itemForm">
+			<p:messages />
+			<p:focus />
+			<p:panelGrid columns="2">
+		
+		Título
+		<p:inputText value="#{itemController.item.titulo}" />
+		
+		Data
+		<p:calendar value="#{itemController.item.data}"
+					pattern="dd/MM/yyyy HH:mm" mask="true" stepHour="1" stepMinute="30" />
+		
+		Descrição
+		<p:inputTextarea value="#{itemController.item.descricao}" />
+			</p:panelGrid>
+			<p:commandButton value="save" action="#{itemController.save()}"
+				update="itemForm, :itemTable"
+				oncomplete="handleDialogSubmit(args, 'itemDialog')" />
+		</h:form>
+	</p:dialog>
+
+	<h:form>
+		<p:confirmDialog global="true" closeOnEscape="true">
+			<p:commandButton value="Sim" type="button"
+				styleClass="ui-confirmdialog-yes btn-green" icon="ui-icon-check" />
+			<p:commandButton value="Não" type="button"
+				styleClass="ui-confirmdialog-no btn-red" icon="ui-icon-close" />
+		</p:confirmDialog>
+	</h:form>
+
+
+	<script type="text/javascript">
+    function handleDialogSubmit(args, dialogName) {
+        if (!args.validationFailed) {
+            PF(dialogName).hide();
+        }
+    }
+</script>
+
+
+</h:body>
+</html>
