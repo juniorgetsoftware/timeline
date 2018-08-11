@@ -1,7 +1,11 @@
 package br.com.timeline;
 
+import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -13,8 +17,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @ComponentScan
@@ -45,11 +47,22 @@ public class SpringConfiguration {
 
 	@Bean
 	public DataSource dataSource() {
-		HikariDataSource dataSource = new HikariDataSource();
-		dataSource.setJdbcUrl("jdbc:hsqldb:mem:test");
-		dataSource.setUsername("sa");
-		dataSource.setPassword("");
-		return dataSource;
+		DataSource datasource = null;
+		try {
+			InitialContext e = new InitialContext();
+			Context envContext = (Context) e.lookup("java:/comp/env");
+			DataSource ds = (DataSource) envContext.lookup("jdbc/timelineDS");
+			datasource = ds;
+		} catch (NamingException arg2) {
+			arg2.printStackTrace();
+		}
+		return datasource;
+		
+//		HikariDataSource dataSource = new HikariDataSource();
+//		dataSource.setJdbcUrl("jdbc:mysql://localhost/timeline");
+//		dataSource.setUsername("root");
+//		dataSource.setPassword("root");
+//		return dataSource;
 	}
 
 }

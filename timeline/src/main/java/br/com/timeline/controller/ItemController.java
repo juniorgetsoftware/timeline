@@ -51,7 +51,7 @@ public class ItemController implements Serializable {
 	public void remove(Item item) {
 		itemService.remove(item);
 		itens = itemService.findAll();
-		FacesUtil.addMsgAtencao("item-msg", "O teim foi removido!", item.toString());
+		FacesUtil.addMsgAtencao("item-msg", "O item foi removido!", item.toString());
 	}
 
 	public void clear() {
